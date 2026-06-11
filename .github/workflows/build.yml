@@ -25,7 +25,7 @@ jobs:
       - name: Compile DLL
         shell: cmd
         run: |
-          g++ -shared -o fly.dll fly.cpp -static -luser32 -lgdi32 -m32 -I"%JAVA_HOME%\include" -I"%JAVA_HOME%\include\win32" 2>&1
+          g++ -shared -o fly.dll test.cpp -static -luser32 -lgdi32 -m32 -I"%JAVA_HOME%\include" -I"%JAVA_HOME%\include\win32" 2>&1
 
       - name: Upload DLL
         uses: actions/upload-artifact@v3
