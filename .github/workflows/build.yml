@@ -1,22 +1,22 @@
-name: Build test.dll
+name: Build fly.dll
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
       - name: Checkout files
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Install MinGW (32-bit)
-        run: choco install mingw --version=12.2.0 --force -y
+        run: choco install mingw --version=12.2.0 --force -y --limit-output
         shell: powershell
 
       - name: Setup Java 8 (JDK) - 32-bit
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '8'
@@ -25,10 +25,10 @@ jobs:
       - name: Compile DLL
         shell: cmd
         run: |
-          g++ -shared -o fly.dll fly.cpp -static -luser32 -m32 -I"%JAVA_HOME%\include" -I"%JAVA_HOME%\include\win32"
+          g++ -shared -o fly.dll fly.cpp -static -luser32 -lgdi32 -m32 -I"%JAVA_HOME%\include" -I"%JAVA_HOME%\include\win32" 2>&1
 
       - name: Upload DLL
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: fly-dll
           path: fly.dll
